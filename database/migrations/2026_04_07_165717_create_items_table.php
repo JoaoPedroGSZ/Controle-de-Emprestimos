@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nome');
             $table->string('descricao')->nullable();
-            $table->string('status')->default('disponível');
+            $table->string('status')->default('disponivel')->nullable();
             $table->timestamps();
         });
     }
