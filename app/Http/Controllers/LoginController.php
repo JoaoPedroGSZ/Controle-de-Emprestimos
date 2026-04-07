@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
     public function index()
     {
         return view('login.index');
@@ -36,6 +34,20 @@ class LoginController extends Controller
             'email' => 'As credenciais fornecidas estão incorretas.',
         ]);
     }
+public function logout(Request $request)
+    {
+        
+        Auth::logout();
+
+        $request->session()->invalidate();
+        
+
+        $request->session()->regenerateToken();
+
+
+        return redirect('/login');
+    }
+
 
     public function create()
     {
