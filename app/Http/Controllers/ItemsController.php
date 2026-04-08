@@ -55,17 +55,17 @@ class ItemsController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, Item $item)
-    {
-        $validatedData = $request->validate([
-            'nome' => 'required|string|max:255',
-            'descricao' => 'nullable|string',
-            'status' => 'nullable|in:disponivel,emprestado',
-        ]);
+{
+    $validatedData = $request->validate([
+        'nome' => 'required|string|max:255',
+        'descricao' => 'required|string',
+        'status' => 'required|in:disponivel,emprestado,manutencao',
+    ]);
 
-        $item->update($validatedData);
+    $item->update($validatedData);
 
-        return redirect()->route('items.index')->with('success', 'Item atualizado com sucesso!');
-    }
+    return redirect()->route('items.index')->with('success', 'Item atualizado com sucesso!');
+}
 
        public function destroy(Item $item)
     {

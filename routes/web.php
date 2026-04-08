@@ -18,4 +18,5 @@ Route::post('/cadastro', [CadastroController::class, 'store']);
     Route::get('/items/create', [ItemsController::class, 'create'])->name('items.create');
     Route::post('/items', [ItemsController::class, 'store'])->name('items.store');
     Route::get('/items/{item}/edit', [ItemsController::class, 'edit'])->name('items.edit');
-     Route::delete('/items/{item}', [ItemsController::class, 'destroy'])->name('items.destroy');
+    Route::put('/items/{item}', [ItemsController::class, 'update'])->name('items.update');
+    Route::delete('/items/{item}', [ItemsController::class, 'destroy'])->name('items.destroy');
