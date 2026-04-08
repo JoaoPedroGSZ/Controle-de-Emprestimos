@@ -46,7 +46,7 @@
         <div class="card custom-card-table">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-light">
+                    <thead>
                         <tr>
                             <th>Nome</th>
                             <th>Descrição</th>
@@ -81,16 +81,16 @@
                                 </td>
                                 <td>
                                     @if($item->status == 'disponivel')
-                                        <form action="{{ route('items.update', $item->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('items.emprestar', $item->id) }}" method="POST" class="d-inline">
                                             @csrf
-                                            @method('PUT')
+                                            @method('POST')
                                             <input type="hidden" name="status" value="emprestado">
                                             <button type="submit" class="btn btn-sm btn-warning">Emprestar</button>
                                         </form>
                                     @elseif($item->status == 'emprestado')
-                                        <form action="{{ route('items.update', $item->id) }}" method="POST" class="d-inline">
+                                        <form action="{{ route('items.devolver', $item->id) }}" method="POST" class="d-inline">
                                             @csrf
-                                            @method('PUT')
+                                            @method('POST')
                                             <input type="hidden" name="status" value="disponivel">
                                             <button type="submit" class="btn btn-sm btn-success">Devolver</button>
                                         </form>

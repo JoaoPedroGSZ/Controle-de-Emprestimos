@@ -20,3 +20,6 @@ Route::post('/cadastro', [CadastroController::class, 'store']);
     Route::get('/items/{item}/edit', [ItemsController::class, 'edit'])->name('items.edit');
     Route::put('/items/{item}', [ItemsController::class, 'update'])->name('items.update');
     Route::delete('/items/{item}', [ItemsController::class, 'destroy'])->name('items.destroy');
+
+    Route::post('/items/{item}/emprestar', [ItemsController::class, 'emprestar'])->name('items.emprestar');
+    Route::post('/items/{item}/devolver', [ItemsController::class, 'devolver'])->name('items.devolver');

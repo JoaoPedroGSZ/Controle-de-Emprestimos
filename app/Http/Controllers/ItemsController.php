@@ -18,6 +18,29 @@ class ItemsController extends Controller
         return view('items.index', compact('items'));
     }
 
+    public function emprestar(Item $item){
+        if($item->status === 'disponivel'){
+            $item->status = 'emprestado';
+            $item->save();
+
+            return redirect()->route('items.index')->with('success', 'Item emprestado com sucesso!');
+        }
+
+        return redirect()->route('items.index')->with('error', 'Item não disponível para empréstimo!');
+
+    }
+
+    public function devolver(Item $item){
+        if($item->status === 'emprestado'){
+            $item->status = 'disponivel';
+            $item->save();
+
+            return redirect()->route('items.index')->with('success', 'Item devolvido com sucesso!');
+        }
+
+        return redirect()->route('items.index')->with('error', 'Item não está emprestado!');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
