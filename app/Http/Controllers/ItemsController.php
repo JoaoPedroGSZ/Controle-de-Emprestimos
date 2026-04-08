@@ -57,6 +57,7 @@ class ItemsController extends Controller
         $validatedData = $request->validate([
             'nome' => 'required|string|max:255',
             'descricao' => 'nullable|string',
+            'requerente' => 'nullable|string|max:255',
             'status' => 'nullable|in:disponivel,emprestado',
         ]);
 
@@ -82,6 +83,7 @@ class ItemsController extends Controller
     $validatedData = $request->validate([
         'nome' => 'required|string|max:255',
         'descricao' => 'required|string',
+        'requerente' => 'nullable|string|max:255',
         'status' => 'required|in:disponivel,emprestado,manutencao',
     ]);
 
@@ -90,7 +92,7 @@ class ItemsController extends Controller
     return redirect()->route('items.index')->with('success', 'Item atualizado com sucesso!');
 }
 
-       public function destroy(Item $item)
+    public function destroy(Item $item)
     {
         $item->delete();
 

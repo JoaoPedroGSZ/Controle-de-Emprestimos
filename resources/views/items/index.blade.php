@@ -22,7 +22,6 @@
             padding: 20px;
             margin-top: 20px;
             border: none;
-            /* Remove a borda padrão do card */
         }
 
         .fw-bold {
@@ -46,11 +45,12 @@
         <div class="card custom-card-table">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead>
+                    <thead class="table-light">
                         <tr>
                             <th>Nome</th>
                             <th>Descrição</th>
                             <th class="text-center">Status</th>
+                            <th class="text-end">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -60,48 +60,62 @@
                                     <div class="fw-semibold">{{ $item->nome }}</div>
                                     <small class="text-muted">ID: #{{ $item->id }}</small>
                                 </td>
-                                <td>
-                                    {{ $item->descricao }}
-                                </td>
+                                <td>{{ $item->descricao }}</td>
                                 <td class="text-center">
-                                    <span
-                                        class="badge rounded-pill px-3 {{ $item->status == 'disponivel' ? 'bg-success' : 'bg-secondary' }}">
+                                    <span class="badge rounded-pill px-3 {{ $item->status == 'disponivel' ? 'bg-success' : 'bg-secondary' }}">
                                         {{ ucfirst($item->status) }}
                                     </span>
                                 </td>
-                                <td class="text-end pe-4">
-                                    <a href="{{ route('items.edit', $item->id) }}"
-                                        class="btn btn-sm btn-edit-custom me-1">Editar</a>
-                                    <form action="{{ route('items.destroy', $item->id) }}" method="POST"
-                                        class="d-inline">
-                                        @csrf @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Excluir?')">Excluir</button>
-                                    </form>
-                                </td>
-                                <td>
-                                    @if($item->status == 'disponivel')
-                                        <form action="{{ route('items.emprestar', $item->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('POST')
-                                            <input type="hidden" name="status" value="emprestado">
-                                            <button type="submit" class="btn btn-sm btn-warning">Emprestar</button>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        @if($item->status == 'disponivel')
+                                            <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#salvarModal-{{ $item->id }}">
+                                                Emprestar
+                                            </button>
+                                        @elseif($item->status == 'emprestado')
+                                            <form action="{{ route('items.devolver', $item->id) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-success">Devolver</button>
+                                            </form>
+                                        @endif
+
+                                        <a href="{{ route('items.edit', $item->id) }}" class="btn btn-sm btn-outline-primary">Editar</a>
+
+                                        <form action="{{ route('items.destroy', $item->id) }}" method="POST" class="d-inline">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Deseja excluir este item?')">Excluir</button>
                                         </form>
-                                    @elseif($item->status == 'emprestado')
-                                        <form action="{{ route('items.devolver', $item->id) }}" method="POST" class="d-inline">
-                                            @csrf
-                                            @method('POST')
-                                            <input type="hidden" name="status" value="disponivel">
-                                            <button type="submit" class="btn btn-sm btn-success">Devolver</button>
-                                        </form>
-                                    @endif
-                                </td>
+                                    </div>
+
+                                    <div class="modal fade text-start" id="salvarModal-{{ $item->id }}" tabindex="-1" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Confirmar Empréstimo</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                                </div>
+                                                <form action="{{ route('items.emprestar', $item->id) }}" method="POST">
+                                                    @csrf
+                                                    <div class="modal-body">
+                                                        <p>Deseja emprestar o item: <strong>{{ $item->nome }}</strong>?</p>
+                                                        <div class="mb-3">
+                                                            <label for="name-{{ $item->id }}" class="form-label">Nome de quem está retirando:</label>
+                                                            <input type="text" class="form-control" id="name-{{ $item->id }}" name="requerente" required>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                        <button type="submit" class="btn btn-warning">Confirmar Empréstimo</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="text-center text-muted py-4">
-                                    Nenhum item cadastrado no momento.
-                                </td>
+                                <td colspan="4" class="text-center text-muted py-4">Nenhum item cadastrado.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -109,7 +123,8 @@
             </div>
         </div>
     </div>
-</body>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
 </html>
